@@ -1,0 +1,9 @@
+---
+swagger: "2.0"
+info:
+  title: "TodoList API"
+  description: "Mark your dones"
+consumes:
+  - application/json
+produces:
+  - application/json

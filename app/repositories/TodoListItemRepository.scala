@@ -1,5 +1,5 @@
 package repositories
 
-class TodoListItemRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
-
-}
+//class TodoListItemRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
+//
+//}
