@@ -3,19 +3,63 @@
 # tags:
 #   - Todo Endpoints
 # responses:
-#   200:
-#     description: success
+#   '200':
+#     description: OK
 #     schema:
-#       $ref: '#definitions/models.TodoListItem'
+#       type: array
+#       items:
+#           $ref: '#/definitions/models.TodoListItem'
+#   '204':
+#     description: Empty TodoList
+#
 ###
-
 GET     /todo   controllers.TodoListController.getAll
+
+###
+# summary: add new TodoList item
+# tags:
+#   - Todo Endpoints
+# responses:
+#   '201':
+#     description: Created
+#     schema:
+#       $ref: '#/definitions/models.TodoListItem'
+#   '400':
+#     description: Bad request
+#
+# parameters:
+#   - name: body
+#     schema:
+#       $ref: '#/definitions/models.NewTodoListItem'
+###
 POST    /todo   controllers.TodoListController.addNewItem
 
+###
+# summary: retrieve a single todo item
+# tags:
+#   - Todo Endpoints
+###
 GET     /todo/:itemId   controllers.TodoListController.getById(itemId: Long)
+
+###
+# summary: remove a single todo item
+# tags:
+#   - Todo Endpoints
+###
 DELETE  /todo/:itemId    controllers.TodoListController.removeItem(itemId: Long)
 
+###
+# summary: mark todo item as done
+# tags:
+#   - Todo Endpoints
+###
 PUT     /todo/done/:itemId  controllers.TodoListController.markAsDone(itemId: Long)
+
+###
+# summary: remove all done todo items
+# tags:
+#   - Todo Endpoints
+###
 DELETE  /todo/done    controllers.TodoListController.removeAllDone
 
 

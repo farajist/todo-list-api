@@ -1,28 +1,33 @@
 package models
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.db.slick.DatabaseConfigProvider
+import slick.jdbc.JdbcProfile
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+class TodoListItemTable(tag: Tag) extends Table[TodoListItem](tag, "todo_items") {
+
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+
+  def description = column[String]("description")
+
+  def isDone = column[Boolean]("is_done")
+
+  def * = (id, description, isDone) <> ((TodoListItem.apply _).tupled, TodoListItem.unapply)
+}
+
+
 class TodoListItemRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext){
 
-  val db = Database.forConfig("h2mem1")
+  private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
-  private class TodoListItemTable(tag: Tag) extends Table[TodoListItem](tag, "todo_items") {
+  import dbConfig._
+  import profile.api._
 
-    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
-    def description = column[String]("description")
-
-    def isDone = column[Boolean]("is_done")
-
-    def * = (id, description, isDone) <> ((TodoListItem.apply _).tupled, TodoListItem.unapply)
-  }
-
-  private val todos = TableQuery[TodoListItemTable]
+  val todos = TableQuery[TodoListItemTable]
 
   def create(description: String): Future[TodoListItem] = db.run {
     (todos.map(t => (t.description, t.isDone))
